@@ -1,15 +1,15 @@
-import { login } from "@/features/login-form/api/auth";
-import { LoginFormDTO } from "@/features/login-form/api/dto/auth.dto";
+import { RegisterFormDTO } from "./api/dto/register.dto";
+import { register } from "./api/register";
 import { Button, Form, Input,notification } from "antd";
 import { setCookie } from "cookies-next";
 import React from "react";
 
-export const LoginForm: React.FC = ()=>{
+export const RegisterForm: React.FC = ()=>{
 
 
-    const onSubmit = async (values:LoginFormDTO) => {
+    const onSubmit = async (values:RegisterFormDTO) => {
       try {
-          const { access_token } = await login(values)
+          const { access_token } = await register(values)
 
           notification.success({
               message:'Успешно',
@@ -19,7 +19,7 @@ export const LoginForm: React.FC = ()=>{
 
           setCookie('accessToken', access_token);
       }catch ( err ) {
-          console.warn('LoginForm', err)
+          console.warn('RegisterForm', err)
       }
     }
 
@@ -31,6 +31,19 @@ export const LoginForm: React.FC = ()=>{
             }}
             onFinish={onSubmit}
         >
+            <Form.Item
+                label={'Имя'}
+                name={'fullName'}
+                rules={[
+                    {
+                        required:true,
+                        message:'Ваше имя'
+                    }
+                ]}
+            >
+                <Input />
+            </Form.Item>
+
             <Form.Item
                 label={'Email'}
                 name={'email'}
@@ -63,7 +76,7 @@ export const LoginForm: React.FC = ()=>{
                     span:16
                 }}
             >
-                <Button htmlType={'submit'}>Войти</Button>
+                <Button htmlType={'submit'}>Зарегистрироваться</Button>
             </Form.Item>
         </Form>
     </div>
